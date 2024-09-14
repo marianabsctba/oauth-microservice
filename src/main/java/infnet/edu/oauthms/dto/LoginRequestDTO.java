@@ -1,11 +1,9 @@
-package infnet.edu.oauthms.model;
+package infnet.edu.oauthms.dto;
 
 
-public class LoginRequest {
+public class LoginRequestDTO {
     private String username;
     private String password;
-
-    // Getters e Setters
 
     public String getUsername() {
         return username;

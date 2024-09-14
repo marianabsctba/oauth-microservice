@@ -1,34 +1,22 @@
 package infnet.edu.oauthms.controller;
 
-import infnet.edu.oauthms.client.UserClient;
-import infnet.edu.oauthms.model.LoginRequest;
-import infnet.edu.oauthms.security.JwtTokenProvider;
+import infnet.edu.oauthms.dto.LoginRequestDTO;
+import infnet.edu.oauthms.service.AuthService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 public class AuthController {
 
-    private final UserClient userClient;
-    private final JwtTokenProvider tokenProvider;
+  @Autowired
+  private AuthService authService;
 
-    public AuthController(UserClient userClient, JwtTokenProvider tokenProvider) {
-        this.userClient = userClient;
-        this.tokenProvider = tokenProvider;
-    }
 
     @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
-        // Valida o usuário e senha no MS-User
-        boolean isValid = userClient.validateUser(loginRequest);
-
-        if (isValid) {
-            // Gera o token JWT
-            String token = tokenProvider.createToken(loginRequest.getUsername());
-            return ResponseEntity.ok(token);
-        } else {
-            return ResponseEntity.status(401).body("Invalid username or password");
-        }
+    public ResponseEntity<?> authenticateUser(@RequestBody LoginRequestDTO loginRequest) {
+        String token = authService.authenticator(loginRequest.getUsername(), loginRequest.getPassword());
+        return ResponseEntity.ok(token);
     }
 }
