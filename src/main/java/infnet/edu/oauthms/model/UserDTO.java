@@ -5,7 +5,6 @@ public class UserDTO {
     private String username;
     private String role;
 
-    // Getters e Setters
 
     public Long getId() {
         return id;
